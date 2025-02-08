@@ -2,12 +2,13 @@
   "manifest_version": 3,
   "name": "StudySphere",
   "version": "1.0",
-  "description": "Automatically classifies websites as distracting or helpful.",
+  "description": "Automatically classifies websites as distracting or helpful and tracks time spent.",
   "permissions": [
     "tabs",
     "activeTab",
     "scripting",
-    "storage"
+    "storage",
+    "idle"
   ],
   "host_permissions": [
     "http://localhost:8080/*"
