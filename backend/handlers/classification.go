@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"studybuddy/services"
+	"studysphere/services"
 )
 
 // ClassificationRequest defines the JSON payload expected in the POST request.
@@ -22,6 +22,11 @@ type ClassificationResponse struct {
 
 // ClassifyHandler handles incoming HTTP POST requests to the /classify endpoint.
 func ClassifyHandler(w http.ResponseWriter, r *http.Request) {
+	// Set CORS headers to allow Chrome extension requests.
+	w.Header().Set("Access-Control-Allow-Origin", "*") // Allows requests from any origin.
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	
 	// Ensure that the request method is POST.
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

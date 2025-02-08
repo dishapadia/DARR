@@ -4,18 +4,23 @@ import (
 	"log"
 	"net/http"
 
-	"studybuddy/handlers"
+	"studysphere/handlers"
+	"studysphere/middleware"
 )
 
 func main() {
-	// Register the /classify endpoint and map it to the ClassifyHandler function.
-	http.HandleFunc("/classify", handlers.ClassifyHandler)
+	// Create a new HTTP multiplexer (router)
+	mux := http.NewServeMux()
 
-	// Log that the server is starting on port 8080.
+	// Register the classify endpoint
+	mux.HandleFunc("/classify", handlers.ClassifyHandler)
+
+	// Wrap all handlers with CORS middleware
+	handlerWithCORS := middleware.CORSMiddleware(mux)
+
+	// Start the server with CORS enabled
 	log.Println("Server starting on port 8080")
-
-	// Start the HTTP server on port 8080. If an error occurs, log it and exit.
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":8080", handlerWithCORS); err != nil {
 		log.Fatal(err)
 	}
 }
