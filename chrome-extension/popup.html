@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Study Buddy Tester</title>
+    <style>
+      /* Basic styling for a neat popup */
+      body {
+        font-family: Arial, sans-serif;
+        width: 300px;
+        padding: 10px;
+      }
+      input, button {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0;
+      }
+      #result {
+        margin-top: 10px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Classify Website</h2>
+    <!-- Form to input a URL -->
+    <form id="classifyForm">
+      <input type="text" id="urlInput" placeholder="Enter website URL" required />
+      <button type="submit">Submit</button>
+    </form>
+    <!-- Container to display the result -->
+    <div id="result"></div>
+    <!-- Link to the JavaScript that handles form submission -->
+    <script src="popup.js"></script>
+  </body>
+</html>

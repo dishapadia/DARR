@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "Study Buddy Tester",
+    "version": "1.0",
+    "description": "Test the backend classification logic for the Study Buddy Chrome extension.",
+    "action": {
+      "default_popup": "popup.html",
+      "default_title": "Study Buddy Test"
+    },
+    "permissions": []
+  }
+  
