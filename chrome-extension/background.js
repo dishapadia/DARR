@@ -43,23 +43,21 @@ async function isDistracting(url) {
   }
 }
 
-// Function: Displays a Chrome notification with the given title and message.
-function showNotification(title, message) {
-  chrome.notifications.create("", {
-    type: "basic",
-    iconUrl: "icon.png", // Ensure you have an icon file in your extension directory.
-    title: title,
-    message: message,
-    priority: 2
-  }, (notificationId) => {
-    console.log("Notification displayed with id:", notificationId);
-  });
-}
+// Function to send a message to the service worker to create a notification
+async function showNotification(title, message) {
+  try {
+      // Get all active service workers
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      
+      if (registrations.length === 0) {
+          console.warn("No active service worker found. Reloading extension may be needed.");
+          return;
+      }
 
-// Function: Triggers an alert when a distracting site has been used too long.
-function triggerAlert(domain, timeSpent) {
-  const message = `You've been on ${domain} for ${timeSpent} seconds. Consider taking a break!`;
-  showNotification("Distraction Alert", message);
+      chrome.runtime.sendMessage({ type: "showNotification", title, message });
+  } catch (error) {
+      console.error("Error sending notification message:", error);
+  }
 }
 
 // Function: Starts a timer for a given domain and updates the cumulative time.
@@ -132,6 +130,17 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
         }
       }
     });
+  }
+});
+
+// Reset timer when a distracting tab is closed
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  if (currentDomain) {
+    console.log(`Tab closed: Resetting time for ${currentDomain}`);
+    delete distractionTimes[currentDomain];
+
+    // Persist the reset times to storage
+    chrome.storage.local.set({ distractionTimes });
   }
 });
 
