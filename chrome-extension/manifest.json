@@ -1,12 +1,22 @@
 {
-    "manifest_version": 3,
-    "name": "Study Buddy Tester",
-    "version": "1.0",
-    "description": "Test the backend classification logic for the Study Buddy Chrome extension.",
-    "action": {
-      "default_popup": "popup.html",
-      "default_title": "Study Buddy Test"
-    },
-    "permissions": []
+  "manifest_version": 3,
+  "name": "StudySphere",
+  "version": "1.0",
+  "description": "Automatically classifies websites as distracting or helpful.",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://localhost:8080/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "StudySphere"
   }
-  
+}
