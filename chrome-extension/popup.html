@@ -3,23 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DARR - Study Assistant</title>
+  <title>StudySphere</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <h2>DARR - Productivity Assistant</h2>
+  <div class="container">
+    <h1 class="title">StudySphere</h1>
+    
+    <div class="task-section">
+      <p>Enter tasks to be done by the end of your session</p>
+      <div class="task-list" id="task-list">
+        <input type="text" class="task-input" placeholder="Task 1">
+        <input type="text" class="task-input" placeholder="Task 2">
+        <input type="text" class="task-input" placeholder="Task 3">
+      </div>
+      <button class="add-task">+ Enter New Task...</button>
+    </div>
 
-  <label for="task">Task:</label>
-  <input type="text" id="task" placeholder="Enter your task">
+    <div class="time-section">
+      <label for="end-time">When do you want to finish your tasks by?</label>
+      <input type="time" id="end-time">
+    </div>
 
-  <label for="time">Time Needed (Minutes):</label>
-  <input type="number" id="time" placeholder="Enter time in minutes">
-
-  <label for="block-sites">Websites to Block (comma-separated):</label>
-  <textarea id="block-sites" placeholder="example.com, facebook.com"></textarea>
-
-  <button id="start-study">Generate Study Guide</button>
-
-  <script src="popup.js"></script>
+    <div class="block-section">
+      <p>Enter any websites that you would like restricted</p>
+      <div class="block-list" id="block-list">
+        <input type="text" class="block-input" placeholder="Website 1">
+        <input type="text" class="block-input" placeholder="Website 2">
+        <input type="text" class="block-input" placeholder="Website 3">
+      </div>
+      <button class="add-website">+ Enter New Website...</button>
+    </div>
+    
+    <button class="generate">Generate Study Guide</button>
+  </div>
 </body>
 </html>
