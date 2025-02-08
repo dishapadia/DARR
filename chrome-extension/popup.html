@@ -1,36 +1,25 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Study Buddy Tester</title>
-    <style>
-      /* Basic styling for a neat popup */
-      body {
-        font-family: Arial, sans-serif;
-        width: 300px;
-        padding: 10px;
-      }
-      input, button {
-        width: 100%;
-        padding: 8px;
-        margin: 5px 0;
-      }
-      #result {
-        margin-top: 10px;
-        font-weight: bold;
-      }
-    </style>
-  </head>
-  <body>
-    <h2>Classify Website</h2>
-    <!-- Form to input a URL -->
-    <form id="classifyForm">
-      <input type="text" id="urlInput" placeholder="Enter website URL" required />
-      <button type="submit">Submit</button>
-    </form>
-    <!-- Container to display the result -->
-    <div id="result"></div>
-    <!-- Link to the JavaScript that handles form submission -->
-    <script src="popup.js"></script>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DARR - Study Assistant</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h2>DARR - Productivity Assistant</h2>
+
+  <label for="task">Task:</label>
+  <input type="text" id="task" placeholder="Enter your task">
+
+  <label for="time">Time Needed (Minutes):</label>
+  <input type="number" id="time" placeholder="Enter time in minutes">
+
+  <label for="block-sites">Websites to Block (comma-separated):</label>
+  <textarea id="block-sites" placeholder="example.com, facebook.com"></textarea>
+
+  <button id="start-study">Generate Study Guide</button>
+
+  <script src="popup.js"></script>
+</body>
 </html>
