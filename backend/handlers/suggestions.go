@@ -42,9 +42,10 @@ func GetSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Build a prompt for the Groq API.
 	prompt := fmt.Sprintf(
-		"The user's distraction score is %d out of 100. They spent the following time on distracting websites: %v (in seconds). Provide friendly, practical suggestions to improve focus and study habits.",
+		"The user's distraction score is %d out of 100. They spent time on the following websites: %v. Generate three concise study tips. Each tip should be a short sentence and be numbered 1, 2, and 3.",
 		userScore, distractionData,
 	)
+	
 
 	// Call Groq's API to generate suggestions.
 	suggestions, err := callGroqSuggestions(prompt)
@@ -76,7 +77,7 @@ func callGroqSuggestions(prompt string) (string, error) {
 		return "", err
 	}
 
-	// ✅ Update endpoint URL to match Groq documentation
+	// groq endpoint URL
 	req, err := http.NewRequest("POST", "https://api.groq.com/openai/v1/chat/completions", bytes.NewBuffer(requestBody))
 	if err != nil {
 		return "", err
@@ -91,7 +92,7 @@ func callGroqSuggestions(prompt string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	// ✅ Read the raw response body from Groq
+	// Read the raw response body from Groq
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
@@ -100,7 +101,7 @@ func callGroqSuggestions(prompt string) (string, error) {
 	// 🔍 Debugging: Print the raw response from Groq
 	fmt.Println("Raw Groq API Response:", string(body))
 
-	// ✅ Parse response based on expected format
+	// Parse response based on expected format
 	var result struct {
 		Choices []struct {
 			Message struct {
@@ -113,7 +114,7 @@ func callGroqSuggestions(prompt string) (string, error) {
 		return "", fmt.Errorf("JSON parse error: %v\nRaw response: %s", err, string(body))
 	}
 
-	// ✅ Return AI-generated suggestion if available, otherwise provide a fallback response
+	// Return AI-generated suggestion if available, otherwise provide a fallback response
 	if len(result.Choices) > 0 {
 		return result.Choices[0].Message.Content, nil
 	}
