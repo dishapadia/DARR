@@ -131,14 +131,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Back button: navigate back to the main popup.
-    analyticsButton.addEventListener('click', () => {
-        try {
-            generateAnalyticsFromBackend(tasks, blockSites, time);
-            window.location.href = chrome.runtime.getURL("analytics.html");
-        }
-        catch (error) {
-        studyPlanResult.textContent = "Error: " + error.message;
-        }
+    analyticsButton.addEventListener('click', async () => {
+        await generateAnalyticsFromBackend(tasks, blockSites, time);
+        window.location.href = chrome.runtime.getURL("analytics.html");
+        // try {
+        //     await generateAnalyticsFromBackend(tasks, blockSites, time);
+        //     window.location.href = chrome.runtime.getURL("analytics.html");
+        // }
+        // catch (error) {
+        // studyPlanResult.textContent = "Error: " + error.message;
+        // }
     });
 
     // Function to send data to backend and get the study guide response
