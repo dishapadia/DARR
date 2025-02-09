@@ -44,10 +44,15 @@ document.addEventListener("DOMContentLoaded", function() {
     // Optionally, store the user data for the study guide
     localStorage.setItem("studyGuideData", JSON.stringify({ tasks, time, blockSites }));
 
-    // Navigate to the new page (study-guide.html) within the extension popup
-    window.location.href = chrome.runtime.getURL("study-guide.html");
     // Send data to the backend to generate the study guide
-    generateStudyGuideFromBackend(tasks, blockSites, time);
+    try {
+      generateStudyGuideFromBackend(tasks, blockSites, time);
+      window.location.href = chrome.runtime.getURL("study-guide.html");
+    }
+    catch (error) {
+      studyPlanResult.textContent = "Error: " + error.message;
+    }
+    
   });
 
   // Function to send data to backend and get the study guide response
@@ -78,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const res = await response.json();
 
       // Display the study plan
-      studyPlanResult.textContent = res.plan;
+      // studyPlanResult.textContent = res.plan;
       localStorage.setItem("studyPlan", JSON.stringify(res));
 
     } catch (error) {

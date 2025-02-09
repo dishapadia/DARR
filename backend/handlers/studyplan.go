@@ -44,7 +44,7 @@ func createStudyPlan(userInput UserInput) (string, error) {
 
 	// Format the prompt with study time per task
 	prompt := fmt.Sprintf(
-		"Create a personalized study plan for the following tasks: %s. The user has %d hours per day to study. "+
+		"Create a personalized study plan for the following tasks: %s. The user has %d hours in the day to accomplish this task. "+
 			"Allocate %d hours per task accordingly to ensure all tasks are completed.",
 		tasks, userInput.Hours, timePerTask,
 	)
@@ -108,6 +108,7 @@ func createStudyPlan(userInput UserInput) (string, error) {
 		return "", fmt.Errorf("failed to decode response: %v", err)
 	}
 
+	log.Println("TEST", response.Choices[0].Message.Content)
 	// Return generated study plan
 	return response.Choices[0].Message.Content, nil
 }

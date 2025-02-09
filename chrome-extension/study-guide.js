@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const displaySites = document.getElementById('display-sites');
     const studyGuideBox = document.getElementById('study-guide-box');
     const backButton = document.getElementById('back-button');
+    const studyPlan = localStorage.getItem("studyPlan");
   
     // Retrieve stored data from the first page
     const storedData = localStorage.getItem("studyGuideData");
@@ -22,7 +23,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     displayDeadline.textContent = time;
     displaySites.textContent = blockSites.join(', ');
 
-    const studyPlan = localStorage.getItem("studyPlan");
     studyGuideBox.value = studyPlan ? studyPlan : "No study plan found. Please generate one first.";
   
     // Back button: navigate back to the main popup page
