@@ -10,31 +10,24 @@ import (
 )
 
 func main() {
-	// Create a new HTTP multiplexer (router)
-	mux := http.NewServeMux()
-
-		// Load environment variables from .env file
+	// Load environment variables from .env file
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	http.HandleFunc("/getSuggestions", handlers.GetSuggestionsHandler)
+	// Create a new HTTP multiplexer (router)
+	mux := http.NewServeMux()
 
-	// Debugging log to verify route is registered
-	log.Println("Routes registered: /getSuggestions, /classify")
-
-	log.Println("Server starting on port 8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatal(err)
-	}
-
-	// Register the classify endpoint
+	// Register endpoints on the custom mux
 	mux.HandleFunc("/classify", handlers.ClassifyHandler)
-	http.HandleFunc("/getSuggestions", handlers.GetSuggestionsHandler) // new suggestions endpoint
+	mux.HandleFunc("/getSuggestions", handlers.GetSuggestionsHandler)
 
 	// Wrap all handlers with CORS middleware
 	handlerWithCORS := middleware.CORSMiddleware(mux)
+
+	// Debugging log to verify routes are registered
+	log.Println("Routes registered: /classify, /getSuggestions")
 
 	// Start the server with CORS enabled
 	log.Println("Server starting on port 8080")

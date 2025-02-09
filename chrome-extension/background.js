@@ -8,7 +8,7 @@ let distractionTimes = {};
 // Flag to indicate whether tracking is paused due to user inactivity.
 let isPaused = false;
 
-// Threshold for triggering a distraction alert (e.g., 15 minutes = 900 seconds).
+// Threshold for triggering a distraction alert (e.g., 10 seconds for testing)
 const distractionThreshold = 10;
 
 // Load stored distraction times from chrome.storage.local on startup.
@@ -44,20 +44,46 @@ async function isDistracting(url) {
 }
 
 // Function to send a message to the service worker to create a notification
-async function showNotification(title, message) {
+function showNotification(title, message) {
   try {
-      // Get all active service workers
-      const registrations = await navigator.serviceWorker.getRegistrations();
-      
-      if (registrations.length === 0) {
-          console.warn("No active service worker found. Reloading extension may be needed.");
-          return;
-      }
-
-      chrome.runtime.sendMessage({ type: "showNotification", title, message });
+    chrome.notifications.create("", {
+      type: "basic",
+      iconUrl: "icon.png", // Ensure icon.png exists in your extension directory
+      title: title,
+      message: message,
+      priority: 2
+    }, (notificationId) => {
+      console.log("Notification created with ID:", notificationId);
+    });
   } catch (error) {
-      console.error("Error sending notification message:", error);
+    console.error("Error creating notification:", error);
   }
+}
+
+async function fetchAndShowSuggestions() {
+  try {
+      const response = await fetch("http://localhost:8080/getSuggestions");
+      const data = await response.json();
+
+      // Show the suggestion as a Chrome notification
+      chrome.notifications.create("", {
+          type: "basic",
+          iconUrl: "icon.png",
+          title: "AI Study Tip",
+          message: data.suggestions,
+          priority: 2
+      });
+
+  } catch (error) {
+      console.error("Error fetching AI suggestions:", error);
+  }
+}
+
+
+// Function: Triggers an alert by sending a notification to the user
+function triggerAlert(domain, timeSpent) {
+  const message = `You've been on ${domain} for ${timeSpent} seconds. Consider taking a break!`;
+  showNotification("Distraction Alert", message);
 }
 
 // Function: Starts a timer for a given domain and updates the cumulative time.
