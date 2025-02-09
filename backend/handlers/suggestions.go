@@ -7,46 +7,68 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 )
+
+// DistractionData represents the structure of incoming distraction data from the frontend.
+type DistractionData struct {
+	Websites  map[string]int `json:"websites"`  // website: seconds spent
+	StudyTime int            `json:"study_time"` // total study time in seconds
+}
 
 // SuggestionResponse defines the JSON structure for the suggestions endpoint response.
 type SuggestionResponse struct {
 	Suggestions string `json:"suggestions"`
 }
 
-// GetSuggestionsHandler computes a user score (or uses stored distraction data),
-// builds a prompt, and calls the Groq API to generate suggestions.
+// GetSuggestionsHandler processes distraction data from the frontend and calls the AI for suggestions.
 func GetSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
+	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// For demonstration, we'll use dummy distraction data.
-	// In production, retrieve actual distraction data for the user.
-	distractionData := map[string]int{
-		"youtube.com": 120, // seconds spent
-		"facebook.com": 90,
+	// Parse JSON body from frontend
+	var data DistractionData
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		http.Error(w, "Invalid JSON input", http.StatusBadRequest)
+		return
 	}
+
+	// Compute distraction percentage
 	totalDistractionTime := 0
-	for _, t := range distractionData {
+	for _, t := range data.Websites {
 		totalDistractionTime += t
 	}
 
-	totalStudyTime := 3600 // example study time in seconds
-	distractionPercentage := float64(totalDistractionTime) / float64(totalStudyTime) * 100
+	distractionPercentage := float64(totalDistractionTime) / float64(data.StudyTime) * 100
 	userScore := 100 - int(distractionPercentage)
 	if userScore < 0 {
 		userScore = 0
 	}
 
-	// Build a prompt for the Groq API.
+	// Format websites data into a readable string
+	var websiteDetails []string
+	for site, timeSpent := range data.Websites {
+		websiteDetails = append(websiteDetails, fmt.Sprintf("%s: %d seconds", site, timeSpent))
+	}
+	
+	formattedWebsites := strings.Join(websiteDetails, ", ")
+	fmt.Println("Formatted websites:", formattedWebsites)
+
+	// Generate prompt for AI
 	prompt := fmt.Sprintf(
-		"The user's distraction score is %d out of 100. They spent the following time on distracting websites: %v (in seconds). Provide friendly, practical suggestions to improve focus and study habits.",
-		userScore, distractionData,
+		"The user's focus score is %d out of 100 (lower scores mean they were more distracted). "+
+			"They spent time on the following websites: %s. These websites represent their main distractions during the session. "+
+			"Provide study tips based on the user's tendency to visit these websites. Praise them for good scores but generate "+
+			"three short study tips for those with a lower score, helping them avoid distractions like these. Each tip should be "+
+			"concise and numbered 1, 2, and 3.",
+		userScore, formattedWebsites,
 	)
 
-	// Call Groq's API to generate suggestions.
+
+	// Call Groq API for suggestions
 	suggestions, err := callGroqSuggestions(prompt)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -59,7 +81,6 @@ func GetSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // callGroqSuggestions calls the Groq API to generate suggestions based on a prompt.
-// Note: Adjust the endpoint URL, request payload, and response parsing based on Groq's documentation.
 func callGroqSuggestions(prompt string) (string, error) {
 	apiKey := os.Getenv("GROQ_API_KEY")
 	if apiKey == "" {
@@ -76,7 +97,6 @@ func callGroqSuggestions(prompt string) (string, error) {
 		return "", err
 	}
 
-	// ✅ Update endpoint URL to match Groq documentation
 	req, err := http.NewRequest("POST", "https://api.groq.com/openai/v1/chat/completions", bytes.NewBuffer(requestBody))
 	if err != nil {
 		return "", err
@@ -91,16 +111,15 @@ func callGroqSuggestions(prompt string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	// ✅ Read the raw response body from Groq
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
 	}
 
-	// 🔍 Debugging: Print the raw response from Groq
+	// Debugging: Print the raw response from Groq
 	fmt.Println("Raw Groq API Response:", string(body))
 
-	// ✅ Parse response based on expected format
+	// Parse response
 	var result struct {
 		Choices []struct {
 			Message struct {
@@ -113,11 +132,10 @@ func callGroqSuggestions(prompt string) (string, error) {
 		return "", fmt.Errorf("JSON parse error: %v\nRaw response: %s", err, string(body))
 	}
 
-	// ✅ Return AI-generated suggestion if available, otherwise provide a fallback response
+	// Return AI-generated suggestion if available, otherwise provide a fallback response
 	if len(result.Choices) > 0 {
 		return result.Choices[0].Message.Content, nil
 	}
 
 	return "Try breaking study sessions into Pomodoro intervals and reducing distractions.", nil
 }
-
