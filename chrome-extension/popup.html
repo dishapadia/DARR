@@ -13,29 +13,27 @@
     <div class="task-section">
       <p>Enter tasks to be done by the end of your session</p>
       <div class="task-list" id="task-list">
-        <input type="text" class="task-input" placeholder="Task 1">
-        <input type="text" class="task-input" placeholder="Task 2">
-        <input type="text" class="task-input" placeholder="Task 3">
+        <input type="text" class="task-input" id="task" placeholder="Task 1">
       </div>
       <button class="add-task">+ Enter New Task...</button>
     </div>
 
     <div class="time-section">
-      <label for="end-time">When do you want to finish your tasks by?</label>
-      <input type="time" id="end-time">
+      <p for="end-time">When do you want to finish your tasks by?</p>
+      <input type="time" id="end-time" placeholder="Enter time">
     </div>
 
     <div class="block-section">
       <p>Enter any websites that you would like restricted</p>
       <div class="block-list" id="block-list">
-        <input type="text" class="block-input" placeholder="Website 1">
-        <input type="text" class="block-input" placeholder="Website 2">
-        <input type="text" class="block-input" placeholder="Website 3">
+        <input type="text" class="block-input" id="block-sites" placeholder="Website 1">
       </div>
       <button class="add-website">+ Enter New Website...</button>
     </div>
     
-    <button class="generate">Generate Study Guide</button>
+    <button id="generate-study-guide" class="generate">Generate Study Guide</button>
   </div>
+
+  <script src="popup.js"></script>
 </body>
 </html>
