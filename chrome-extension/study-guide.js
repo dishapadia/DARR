@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const studyGuideBox = document.getElementById('study-guide-box');
     const backButton = document.getElementById('back-button');
     const studyPlan = localStorage.getItem("studyPlan");
+    const startSessionButton = document.getElementById('start-session');
   
     // Retrieve stored data from the first page
     const storedData = localStorage.getItem("studyGuideData");
