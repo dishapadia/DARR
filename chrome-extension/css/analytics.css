@@ -1,65 +1,76 @@
-/* Overall page styling */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
+    width: 400px;
+    height: 500px;
+    padding: 13px;
     margin: 0;
-    padding: 20px;
+    box-sizing: border-box;
   }
   
   .container {
-    background-color: #fff;
-    padding: 20px 30px;
-    border-radius: 10px;
-    max-width: 600px;
-    margin: 0 auto;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    background: #d9d9d9;
+    padding: 9px; 
+    border-radius: 15px;
+    text-align: center;
+    height: 120%;
   }
   
-  h1, h2 {
-    color: #333;
-    text-align: center;
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    background: #333;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
   }
   
   .section {
-    margin: 20px 0;
+    margin: 20px 0; 
   }
   
-  #analysis-details {
-    list-style: none;
-    padding-left: 0;
-  }
-  
-  #analysis-details li {
-    background: #eaeaea;
-    margin-bottom: 10px;
+  .tasks, .websites {
+    height: 200px; 
+    overflow: hidden;
     padding: 10px;
+    background: white;
     border-radius: 5px;
   }
   
-  .plan-text {
-    background: #f9f9f9;
+  input {
+    width: 90%;
     padding: 10px;
+    margin: 10px 0; 
     border: 1px solid #ccc;
     border-radius: 5px;
-    white-space: pre-wrap;
-    overflow-y: auto;
-    margin-top: 10px;
   }
   
   button {
-    display: block;
     width: 100%;
     background-color: #4CAF50;
     color: white;
     padding: 15px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
+    border-radius: 5px;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: 15px;
   }
   
   button:hover {
     background-color: #45a049;
+  }
+  
+  .add-task, .add-website {
+    background: #555;
+    color: white;
+    padding: 10px; 
+    font-size: 16px;
+    width: 100%;
+    margin-top: 15px;
+  }
+  
+  .add-task:hover, .add-website:hover {
+    background: #777;
   }
   

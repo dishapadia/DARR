@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const displayDeadline = document.getElementById('display-deadline');
   const displaySites = document.getElementById('display-sites');
   const studyGuideBox = document.getElementById('study-guide-box');
-  const backButton = document.getElementById('back-button');
+  const startSession = document.getElementById('start-session');
 
   // Retrieve stored data
   const storedData = localStorage.getItem("studyGuideData");
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   checkStudyPlan();
 
   // Back button event
-  backButton.addEventListener('click', () => {
-      window.location.href = chrome.runtime.getURL("popup.html");
+  startSession.addEventListener('click', () => {
+      window.location.href = chrome.runtime.getURL("pomodoro.html");
   });
 });

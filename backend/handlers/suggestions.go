@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -12,7 +13,7 @@ import (
 
 // DistractionData represents the structure of incoming distraction data from the frontend.
 type DistractionData struct {
-	Websites  map[string]int `json:"websites"`  // website: seconds spent
+	Websites  map[string]int `json:"websites"`   // website: seconds spent
 	StudyTime int            `json:"study_time"` // total study time in seconds
 }
 
@@ -25,6 +26,7 @@ type SuggestionResponse struct {
 func GetSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		log.Println("what is goign here")
 		return
 	}
 
@@ -33,6 +35,7 @@ func GetSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		http.Error(w, "Invalid JSON input", http.StatusBadRequest)
+		log.Println("what is goign here 2")
 		return
 	}
 
@@ -53,7 +56,7 @@ func GetSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
 	for site, timeSpent := range data.Websites {
 		websiteDetails = append(websiteDetails, fmt.Sprintf("%s: %d seconds", site, timeSpent))
 	}
-	
+
 	formattedWebsites := strings.Join(websiteDetails, ", ")
 	fmt.Println("Formatted websites:", formattedWebsites)
 
@@ -67,11 +70,11 @@ func GetSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
 		userScore, formattedWebsites,
 	)
 
-
 	// Call Groq API for suggestions
 	suggestions, err := callGroqSuggestions(prompt)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Println("what is goign here 3")
 		return
 	}
 
@@ -94,11 +97,13 @@ func callGroqSuggestions(prompt string) (string, error) {
 		},
 	})
 	if err != nil {
+		log.Println("what is goign here 4")
 		return "", err
 	}
 
 	req, err := http.NewRequest("POST", "https://api.groq.com/openai/v1/chat/completions", bytes.NewBuffer(requestBody))
 	if err != nil {
+		log.Println("what is goign here 5")
 		return "", err
 	}
 	req.Header.Set("Content-Type", "application/json")
@@ -107,12 +112,14 @@ func callGroqSuggestions(prompt string) (string, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+		log.Println("what is goign here 6")
 		return "", err
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		log.Println("what is goign here 7")
 		return "", err
 	}
 
@@ -129,8 +136,10 @@ func callGroqSuggestions(prompt string) (string, error) {
 	}
 
 	if err := json.Unmarshal(body, &result); err != nil {
+		log.Println("what is goign here 8")
 		return "", fmt.Errorf("JSON parse error: %v\nRaw response: %s", err, string(body))
 	}
+	log.Println("TEST", result.Choices[0].Message.Content)
 
 	// Return AI-generated suggestion if available, otherwise provide a fallback response
 	if len(result.Choices) > 0 {

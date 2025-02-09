@@ -39,6 +39,11 @@ document.addEventListener("DOMContentLoaded", function() {
       alert("Please fill in all fields.");
       return;
     }
+    try {
+      localStorage.removeItem("studyGuideData");
+    } catch (error) {
+      console.error("Error removing studyGuideData from localStorage:", error);
+    }
 
     // Store the basic user data
     localStorage.setItem("studyGuideData", JSON.stringify({ tasks, time, blockSites }));
