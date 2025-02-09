@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resumeButton = document.getElementById('resume-pomodoro');
     const sessionMessage = document.getElementById('session-message');
     const timerDisplay = document.getElementById('timer-display');
-    const backButton = document.getElementById('back-button');
+    const analyticsButton = document.getElementById('analytics-button');
 
     let timerInterval = null;
     let remainingSeconds = 0;
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Back button: navigate back to the main popup.
-    backButton.addEventListener('click', () => {
-        window.location.href = chrome.runtime.getURL("popup.html");
+    analyticsButton.addEventListener('click', () => {
+        window.location.href = chrome.runtime.getURL("analytics.html");
     });
 });
