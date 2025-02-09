@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const storedData = localStorage.getItem("studyGuideData");
   if (!storedData) {
       studyGuideBox.textContent = 'No data found. Please go back and fill in the form.';
+
       return;
   }
 

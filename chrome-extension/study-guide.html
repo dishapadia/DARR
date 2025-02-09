@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Your Study Guide</title>
-  <!-- Link to your shared CSS file -->
   <link rel="stylesheet" href="css/study-guide.css">
 </head>
 <body>
   <div class="container">
-    <!-- Page Title -->
     <div class="title">Your Study Guide</div>
     
-    <!-- Section to display the user’s passed input -->
     <div class="section" id="user-info">
       <h3>Your Input</h3>
       <p><strong>Tasks:</strong> <span id="display-tasks"></span></p>
@@ -19,15 +16,18 @@
       <p><strong>Distraction Sites:</strong> <span id="display-sites"></span></p>
     </div>
     
-    <!-- Section to display the study guide in a text box -->
     <div class="section" id="guide-container">
       <label for="study-guide-box"><strong>Study Guide:</strong></label>
       <textarea id="study-guide-box" readonly rows="10" placeholder="Loading your study guide..."></textarea>
     </div>
     
-    <!-- Back button -->
+    <!-- New Start Session Button -->
+    <button id="start-session">Start Session</button>
+    
+    <!-- Existing Back Button -->
     <button id="back-button">Back</button>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="study-guide.js"></script>
 </body>
 </html>

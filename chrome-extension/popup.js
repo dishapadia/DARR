@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
     window.location.href = chrome.runtime.getURL("study-guide.html");
 });
 
+
   // Function to send data to backend and get the study guide response
   async function generateStudyGuideFromBackend(tasks, blockSites, time) {
     const data = { tasks: tasks, time: parseInt(time) };
@@ -68,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const res = await response.json();
         console.log(res);
         localStorage.setItem("studyPlan", JSON.stringify(res));
+
 
     } catch (error) {
         document.getElementById("study-plan-result").textContent = "Error: " + error.message;
