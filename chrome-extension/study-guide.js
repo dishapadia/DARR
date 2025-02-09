@@ -1,4 +1,3 @@
-// study-guide.js
 document.addEventListener('DOMContentLoaded', async () => {
     // Elements to display passed data
     const displayTasks = document.getElementById('display-tasks');
@@ -24,10 +23,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     displaySites.textContent = blockSites.join(', ');
 
     studyGuideBox.value = studyPlan ? studyPlan : "No study plan found. Please generate one first.";
-  
+    
     // Back button: navigate back to the main popup page
     backButton.addEventListener('click', () => {
       window.location.href = chrome.runtime.getURL("popup.html");
     });
-  });
-  
+
+    // Start Session button: navigate to the pomodoro page
+    startSessionButton.addEventListener('click', () => {
+      window.location.href = chrome.runtime.getURL("pomodoro.html");
+    });
+});
