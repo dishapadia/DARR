@@ -8,18 +8,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // If the study plan isn't found, display a fallback message.
     if (!studyPlan) {
-    document.getElementById("plan-summary").textContent =
-        "No study plan found. Please generate one first.";
-    document.getElementById("full-plan-box").textContent =
-        "No study plan found. Please generate one first.";
-    return;
+        document.getElementById("plan-summary").textContent =
+            "No study plan found. Please generate one first.";
+        document.getElementById("full-plan-box").textContent =
+            "No study plan found. Please generate one first.";
+        return;
     }
 
     if (!analysis) {
-        document.getElementById("plan-summary").textContent = "analysis issue";
+        document.getElementById("plan-summary").textContent = "Analysis issue: No data found.";
         return;
-        }
-    analysisBox.textContent = analysis
+    }
+
+    // Parse analysis JSON properly
+    try {
+        const analysisData = JSON.parse(analysis);
+        analysisBox.textContent = analysisData.suggestions || "No suggestions found.";
+    } catch (error) {
+        console.error("Error parsing analysis data:", error);
+        analysisBox.textContent = "Error loading suggestions.";
+    }
 
     // In case the stored study plan contains literal "\n" escapes instead of actual newlines,
     // replace them. (If your backend already fixed this, this line may not be needed.)
@@ -29,8 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const lines = studyPlan.split("\n").filter(line => line.trim() !== "");
     const totalLines = lines.length;
 
-    // For this example, we'll assume that tasks are indicated by lines that start with a number followed by a period
-    // or a bullet point (like '-' or '*'). Adjust the regex as needed.
+    // Identify tasks: Lines starting with numbers or bullet points (like '-' or '*')
     const taskLines = lines.filter(line => /^\d+\./.test(line) || /^[-*]/.test(line));
     const totalTasks = taskLines.length;
 
@@ -41,23 +48,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Update the detailed analysis.
     const analysisDetails = document.getElementById("analysis-details");
     const details = [
-    `Total number of lines: ${totalLines}`,
-    `Estimated number of tasks: ${totalTasks}`,
-    // Add more detailed analysis items here as needed.
+        `Total number of lines: ${totalLines}`,
+        `Estimated number of tasks: ${totalTasks}`
     ];
     details.forEach(detail => {
-    const li = document.createElement("li");
-    li.textContent = detail;
-    analysisDetails.appendChild(li);
+        const li = document.createElement("li");
+        li.textContent = detail;
+        analysisDetails.appendChild(li);
     });
 
     // Display the full study plan in a styled div.
     const fullPlanBox = document.getElementById("full-plan-box");
     fullPlanBox.textContent = studyPlan;
 
-    newSessionButtonButton.addEventListener("click", function() {
-        // For Chrome extension: use chrome.runtime.getURL if navigating to an internal page.
+    // Ensure the button navigates to a new session
+    newSessionButton.addEventListener("click", function() {
         window.location.href = chrome.runtime.getURL("popup.html");
-        // Or, if not in an extension, simply use: window.history.back();
-      });
+    });
 });
