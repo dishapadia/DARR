@@ -63,7 +63,7 @@ StudySphere is a **Google Chrome extension** that helps students:
 ### **Installation**
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-repo/studysphere.git
+   git clone https://github.com/your-repo/DSRR.git
    ```
 2. Load the Chrome extension:
    - Open **Chrome** and go to `chrome://extensions/`
