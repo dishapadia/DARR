@@ -1,76 +1,104 @@
+/* Overall page styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    width: 400px;
-    height: 500px;
-    padding: 13px;
-    margin: 0;
-    box-sizing: border-box;
-  }
-  
-  .container {
-    background: #d9d9d9;
-    padding: 9px; 
-    border-radius: 15px;
-    text-align: center;
-    height: 120%;
-  }
-  
-  .title {
-    font-size: 28px;
-    font-weight: bold;
-    background: #333;
-    color: white;
-    padding: 20px;
-    border-radius: 5px;
-  }
-  
-  .section {
-    margin: 20px 0; 
-  }
-  
-  .tasks, .websites {
-    height: 200px; 
-    overflow: hidden;
-    padding: 10px;
-    background: white;
-    border-radius: 5px;
-  }
-  
-  input {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0; 
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  button {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 15px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-    margin-top: 15px;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
-  .add-task, .add-website {
-    background: #555;
-    color: white;
-    padding: 10px; 
-    font-size: 16px;
-    width: 100%;
-    margin-top: 15px;
-  }
-  
-  .add-task:hover, .add-website:hover {
-    background: #777;
-  }
-  
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  width: 400px;
+  min-height: 500px;
+  padding: 15px;
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main container for the analysis page */
+.container {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+/* Title styling */
+h1 {
+  font-size: 28px;
+  font-weight: bold;
+  background: #333;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Section styling */
+.section {
+  margin: 20px 0;
+  text-align: left;
+}
+
+/* Section headings */
+.section h2 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Overview text styling */
+#plan-summary {
+  font-size: 16px;
+  color: #555;
+  margin: 10px 0;
+}
+
+/* Analysis details list styling */
+#analysis-details {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+#analysis-details li {
+  background: #eaeaea;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Analysis guide box styling (matching study guide box theme) */
+#analysis-guide-box {
+  width: 90%;      /* Set to 90% of the container's width */
+  margin: 10px auto;  /* Center horizontally */
+  height: 300px;   /* Increased height for a larger suggestions box */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: #f9f9f9;
+  resize: none; 
+}
+
+/* /* Button styling
+button {
+  width: 100%;
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: #45a049;
+}
+/*   
+/* Optional: Bring the New Session button closer */
+/* #new-session-button {
+  margin-top: 5px;
+} */
