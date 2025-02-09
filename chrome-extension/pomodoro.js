@@ -144,17 +144,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Function to send data to backend and get the study guide response
-    async function generateAnalyticsFromBackend(tasks, blockSites, time) {
+// Function to send data to backend and get the study guide (analytics) response
+async function generateAnalyticsFromBackend(tasks, blockSites, time) {
+    // Transform the blockSites array into a map/object with initial timer values (e.g., 0 seconds)
+    let websiteTimes = {};
+    blockSites.forEach(site => {
+        websiteTimes[site] = 0;
+    });
 
-        // Prepare the data to send to the backend
-        const data = {
-            websites: blockSites,
-            // websitesToBlock: blockSites,
-            study_time: parseInt(time * 3600),
-        };
+    // Prepare the data to send to the backend, converting study time (hours) to seconds
+    const data = {
+        websites: websiteTimes,
+        study_time: parseInt(time * 3600)
+    };
 
-        try {
-        // Send the POST request to the backend
+    try {
+        // Send the POST request to the backend with correct JSON input
         const response = await fetch("http://localhost:8080/getSuggestions", {
             method: "POST",
             headers: {
@@ -170,14 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Parse the response
         const res = await response.json();
 
-        // Display the study plan
-        // studyPlanResult.textContent = res.plan;
+        // Store the analysis data in localStorage (or use it as needed)
         localStorage.setItem("analysis", JSON.stringify(res));
+    } catch (error) {
+        console.error("Error generating analytics:", error.message);
+    }
+}
 
-        } catch (error) {
-            studyPlanResult.textContent = "Error: " + error.message;
-        }
-    };
 
 });
 
