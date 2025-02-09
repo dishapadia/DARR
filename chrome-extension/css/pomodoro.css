@@ -1,0 +1,102 @@
+/* Overall page styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    width: 400px;
+    min-height: 500px;
+    padding: 15px;
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Main container styling */
+  .container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+  
+  /* Title styling */
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    background: #333;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  /* Tomato and Timer Section */
+  .tomato-timer {
+    margin-bottom: 20px;
+  }
+  .tomato-image {
+    width: 250px;
+    display: block;
+    margin: 0 auto;
+  }
+  #timer-display {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    color: #4CAF50;
+    margin-top: 10px;
+  }
+  
+  /* Session message styling */
+  #session-message {
+    font-size: 18px;
+    color: #555;
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  /* Form section styling */
+  .form-section {
+    margin: 20px 0;
+    text-align: left;
+  }
+  
+  /* Input styling */
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  /* Timer controls (if used separately) */
+  /* (Not needed if buttons are directly in HTML) */
+  
+  /* Button styling */
+  button {
+    width: 100%;
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  
