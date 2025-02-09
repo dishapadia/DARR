@@ -42,7 +42,7 @@ func GetSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Build a prompt for the Groq API.
 	prompt := fmt.Sprintf(
-		"The user's distraction score is %d out of 100. They spent time on the following websites: %v. Generate three concise study tips. Each tip should be a short sentence and be numbered 1, 2, and 3.",
+		"The user's focus score is %d out of 100 (lower scores mean they were more distracted). They spent time on the following websites: %v. Praise the user for higher scores, but generate (three) concise study tips for users with a lower score. Each tip should be a short sentence and be numbered 1, 2, and 3.",
 		userScore, distractionData,
 	)
 	
