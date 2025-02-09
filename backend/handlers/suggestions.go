@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -12,7 +13,7 @@ import (
 
 // DistractionData represents the structure of incoming distraction data from the frontend.
 type DistractionData struct {
-	Websites  map[string]int `json:"websites"`  // website: seconds spent
+	Websites  map[string]int `json:"websites"`   // website: seconds spent
 	StudyTime int            `json:"study_time"` // total study time in seconds
 }
 
@@ -53,7 +54,7 @@ func GetSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
 	for site, timeSpent := range data.Websites {
 		websiteDetails = append(websiteDetails, fmt.Sprintf("%s: %d seconds", site, timeSpent))
 	}
-	
+
 	formattedWebsites := strings.Join(websiteDetails, ", ")
 	fmt.Println("Formatted websites:", formattedWebsites)
 
@@ -66,7 +67,6 @@ func GetSuggestionsHandler(w http.ResponseWriter, r *http.Request) {
 			"concise and numbered 1, 2, and 3.",
 		userScore, formattedWebsites,
 	)
-
 
 	// Call Groq API for suggestions
 	suggestions, err := callGroqSuggestions(prompt)
@@ -134,6 +134,7 @@ func callGroqSuggestions(prompt string) (string, error) {
 
 	// Return AI-generated suggestion if available, otherwise provide a fallback response
 	if len(result.Choices) > 0 {
+		log.Println("TEST", result.Choices[0].Message.Content)
 		return result.Choices[0].Message.Content, nil
 	}
 

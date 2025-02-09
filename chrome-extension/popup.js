@@ -40,8 +40,14 @@ document.addEventListener("DOMContentLoaded", function() {
       alert("Please fill in all fields.");
       return;
     }
+    try {
+      localStorage.removeItem("studyGuideData");
+    } catch (error) {
+      console.error("Error removing studyGuideData from localStorage:", error);
+    }
 
     // Optionally, store the user data for the study guide
+
     localStorage.setItem("studyGuideData", JSON.stringify({ tasks, time, blockSites }));
 
     // Send data to the backend to generate the study guide
@@ -84,7 +90,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
       // Display the study plan
       // studyPlanResult.textContent = res.plan;
-      localStorage.setItem("studyPlan", JSON.stringify(res));
+
+      try {
+        localStorage.setItem("studyPlan", JSON.stringify(res));
+      } catch(error) {
+        studyPlanResult.textContent = "Error: " + error.message;
+      }
 
     } catch (error) {
         studyPlanResult.textContent = "Error: " + error.message;

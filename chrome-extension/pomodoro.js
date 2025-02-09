@@ -9,6 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const timerDisplay = document.getElementById('timer-display');
     const analyticsButton = document.getElementById('analytics-button');
 
+    const storedData = localStorage.getItem("studyGuideData");
+    if (!storedData) {
+      studyGuideBox.value = 'No data found. Please go back and fill in the form.';
+      return;
+    }
+    
+    // Parse the retrieved data
+    const { tasks, time, blockSites } = JSON.parse(storedData);
+
+
     let timerInterval = null;
     let remainingSeconds = 0;
     let currentMode = "work"; // "work" or "break"
@@ -122,6 +132,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Back button: navigate back to the main popup.
     analyticsButton.addEventListener('click', () => {
-        window.location.href = chrome.runtime.getURL("analytics.html");
+        try {
+            generateAnalyticsFromBackend(tasks, blockSites, time);
+            window.location.href = chrome.runtime.getURL("analytics.html");
+        }
+        catch (error) {
+        studyPlanResult.textContent = "Error: " + error.message;
+        }
     });
+
+    // Function to send data to backend and get the study guide response
+    async function generateAnalyticsFromBackend(tasks, blockSites, time) {
+
+        // Prepare the data to send to the backend
+        const data = {
+            websites: blockSites,
+            // websitesToBlock: blockSites,
+            study_time: parseInt(time * 3600),
+        };
+
+        try {
+        // Send the POST request to the backend
+        const response = await fetch("http://localhost:8080/getSuggestions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to generate analysis");
+        }
+
+        // Parse the response
+        const res = await response.json();
+
+        // Display the study plan
+        // studyPlanResult.textContent = res.plan;
+        localStorage.setItem("analysis", JSON.stringify(res));
+
+        } catch (error) {
+            studyPlanResult.textContent = "Error: " + error.message;
+        }
+    };
+
 });
+
+  
