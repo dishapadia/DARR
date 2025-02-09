@@ -1,16 +1,92 @@
-# DSRR
+# StudySphere
 
-# work/task productivity assistant
+## 📌 Inspiration
+StudySphere was created to help students **stay focused and productive** while studying. We recognized that distractions—like social media, entertainment sites, and unstructured study sessions—reduce efficiency. By integrating **AI-powered analysis**, **Pomodoro timing**, and **distraction tracking**, StudySphere provides a structured study experience with **personalized recommendations** to improve habits.
 
-This is a productivity tool that will help keep suers stay on track with completing their desired tasks in their desired timeline, keep them off distraction websites, and will help them along the way by sending them reminders and giving them curated study guides based off their task and timeline and suggestions for how to improve for the next work session. 
+## ✨ What It Does
+StudySphere is a **Google Chrome extension** that helps students:
+- **Track Time on Distracting Websites** 🕒
+- **Use a Pomodoro Timer** for Structured Study Sessions 🍅
+- **Block Distracting Websites** 🚫
+- **Receive AI-Generated Study Tips** 📚
+- **Analyze Their Study Sessions** 📊
+- **Automatically Resume Sessions** When the Extension is Reopened 🔄
 
-- it’ll send user pop up reminders/messages when you are on webpages that are labeled “distraction”. (focus mode)
-- Create study plan for users when the user feeds it information
-    - the info the user feeds it is what the task is (description of task), what the timeline for the user to finish the task is, and the links to “distraction” websites that the user wants to stay off of when they’re in working mode
-- the study assistant will then give user an option to “start studying”. During this time the work/study/task assistant will set up a pomodoro timer for the user and during this time the study assistant is going to collect the user’s activity for example what websites it goes to, how long they spend on the distraction websites, how long user spends on actually studying/working. It turns this information into scores for the user (scores of how well the user did).
-- usecase for when the user enters any “distraction” websites, the user will get a popup reminder message telling them that this is a distraction website and that they should go back to their task.
-- When user clicks on “done for the day” option after their studying is done. The assistant will give them a summary of how well they did so give the scores of the time they spent studying and the time they spent on distractions. how many tasks they got done from their desired/created checklist of tasks, etc. And it will also give productivity suggestions and tips on how to better improve their studying/work for the next study session based off how they did currently.
+## 🛠️ How We Built It
+### **Tech Stack**
+- **Frontend:** HTML, CSS, JavaScript (Popup UI, Study Guide, Analytics Page)
+- **Backend:** Go (Handles AI suggestions, classification, and session tracking)
+- **AI Integration:** Groq API (for AI-generated study recommendations)
+- **Storage:** Chrome Storage API & LocalStorage (Session and Settings Management)
+- **Messaging:** Chrome Runtime API (Background and Popup Communication)
 
-# Project Structure
+### **Main Features and Code Breakdown**
+- **Pomodoro Timer** (`pomodoro.js`)
+  - Tracks study and break times, automatically transitioning between them.
+  - Saves progress, so the timer resumes even if the extension is closed.
 
+- **Distraction Tracking** (`background.js`)
+  - Monitors websites visited and logs time spent on distracting sites.
+  - Sends alerts when distraction thresholds are exceeded.
+
+- **AI-Powered Study Tips** (`suggestions.go`)
+  - Uses the Groq API to generate short, personalized study tips.
+  - Analyzes time spent on distractions and suggests improvements.
+
+- **Session Persistence** (`popup.js` & `analytics.js`)
+  - Saves and restores user input fields across sessions.
+  - Ensures the last opened page reopens when the extension is clicked again.
+
+## 🚧 Challenges We Ran Into
+- **Persisting Timer State**: Since Chrome extension popups close when clicked out, we needed to store timer state in the background service worker and sync it when the popup reopens.
+- **Cross-Origin API Requests (CORS Issues)**: Connecting the frontend to the Go backend required setting up proper CORS handling.
+- **AI Formatting Issues**: Initial AI responses were too verbose, requiring prompt engineering to make them concise.
+
+## 🎯 Accomplishments That We're Proud Of
+- Successfully integrated **AI-generated study recommendations** based on real distraction data.
+- Built a **Pomodoro timer** that remains active even when the extension popup is closed.
+- Created a **seamless study session experience** by allowing users to enter tasks, set a timer, and analyze distractions all in one extension.
+
+## 📚 What We Learned
+- How to **develop a Chrome extension** with persistent background scripts.
+- How to **integrate AI services** (Groq API) into a web-based application.
+- Best practices for **handling state across sessions** in a browser environment.
+- How to **structure a Go backend** for API handling and AI request processing.
+
+## 🔮 What's Next for StudySphere
+- **More AI Customization**: Allow users to specify study goals and get more personalized recommendations.
+- **Live Progress Dashboard**: A dashboard that visualizes study habits over time.
+- **Enhanced Website Blocking**: Option to enforce distraction blocking rather than just tracking time spent.
+- **Multi-Session Analytics**: Long-term tracking to see improvement trends in focus scores.
+
+## 🚀 Getting Started
+### **Installation**
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/your-repo/studysphere.git
+   ```
+2. Load the Chrome extension:
+   - Open **Chrome** and go to `chrome://extensions/`
+   - Enable **Developer Mode**
+   - Click **Load Unpacked** and select the `studysphere` directory.
+3. Run the backend:
+   ```bash
+   go run main.go
+   ```
+4. Click on the extension in the toolbar and start your session!
+
+### **Environment Variables (.env)**
+Create a `.env` file in the root directory and add:
+```
+GROQ_API_KEY=your-api-key-here
+```
+
+## 💻 Usage
+- Open the extension popup and enter your **study tasks** and **distracting websites**.
+- Click **Start Pomodoro** to begin a focused study session.
+- View **distraction alerts** if you spend too much time on blocked websites.
+- At the end of your session, check the **analytics page** for insights and AI study tips!
+
+---
+Made with ❤️ by the StudySphere Team 🚀
 
