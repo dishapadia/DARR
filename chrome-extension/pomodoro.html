@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pomodoro Timer - StudySphere</title>
+  <link rel="stylesheet" href="css/pomodoro.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Pomodoro Timer</h1>
+    
+    <!-- Tomato Image, Timer Display, and Session Message Section -->
+    <div class="tomato-timer">
+      <img src="tomato.png" alt="Tomato" class="tomato-image">
+      <p id="timer-display">00:00</p>
+      <!-- This element shows messages such as "Rest time" -->
+      <p id="session-message"></p>
+    </div>
+    
+    <!-- Pomodoro Configuration Section -->
+    <div class="form-section" id="form-section">
+      <label for="work-duration">Work Duration (minutes):</label>
+      <input type="number" id="work-duration" placeholder="25">
+      
+      <label for="break-duration">Break Duration (minutes):</label>
+      <input type="number" id="break-duration" placeholder="5">
+      
+      <label for="long-break-duration">Long Break Duration (minutes):</label>
+      <input type="number" id="long-break-duration" placeholder="15">
+      
+      <button id="start-pomodoro">Start Pomodoro</button>
+    </div>
+
+    <!-- Timer Controls -->
+    <div class="timer-controls" id="timer-controls">
+      <button id="stop-pomodoro" style="display:none;">Stop Pomodoro</button>
+      <button id="resume-pomodoro" style="display:none;">Resume Pomodoro</button>
+    </div>
+    
+    <!-- Back Button -->
+    <button id="back-button">Back</button>
+  </div>
+  <script src="pomodoro.js"></script>
+</body>
+</html>
