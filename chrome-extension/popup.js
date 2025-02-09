@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // Handle the generate study guide action
-  document.getElementById("generate-study-guide").addEventListener("click", function() {
+  document.getElementById("generate-study-guide").addEventListener("click", async function() {
     const tasks = Array.from(taskList.querySelectorAll(".task-input"))
       .map(input => input.value.trim())
       .filter(task => task);
@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function() {
       .map(input => input.value.trim())
       .filter(site => site);
 
-    // Validate that all required fields are filled
     if (!tasks.length || !time || !blockSites.length) {
       alert("Please fill in all fields.");
       return;
@@ -46,87 +45,38 @@ document.addEventListener("DOMContentLoaded", function() {
       console.error("Error removing studyGuideData from localStorage:", error);
     }
 
-    // Optionally, store the user data for the study guide
-
+    // Store the basic user data
     localStorage.setItem("studyGuideData", JSON.stringify({ tasks, time, blockSites }));
 
-    // Send data to the backend to generate the study guide
-    try {
-      generateStudyGuideFromBackend(tasks, blockSites, time);
-      window.location.href = chrome.runtime.getURL("study-guide.html");
-    }
-    catch (error) {
-      studyPlanResult.textContent = "Error: " + error.message;
-    }
-    
-  });
+    // Wait for the backend response before navigating
+    await generateStudyGuideFromBackend(tasks, blockSites, time);
+
+    // Navigate to the new page AFTER study plan is stored
+    window.location.href = chrome.runtime.getURL("study-guide.html");
+});
+
 
   // Function to send data to backend and get the study guide response
   async function generateStudyGuideFromBackend(tasks, blockSites, time) {
-
-    // Prepare the data to send to the backend
-    const data = {
-      tasks: tasks,
-      // websitesToBlock: blockSites,
-      time: parseInt(time),
-    };
+    const data = { tasks: tasks, time: parseInt(time) };
 
     try {
-      // Send the POST request to the backend
-      const response = await fetch("http://localhost:8080/studyplan", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-      });
+        const response = await fetch("http://localhost:8080/studyplan", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
 
-      if (!response.ok) {
-          throw new Error("Failed to generate study plan");
-      }
+        if (!response.ok) {
+            throw new Error("Failed to generate study plan");
+        }
 
-      // Parse the response
-      const res = await response.json();
-
-      // Display the study plan
-      // studyPlanResult.textContent = res.plan;
-
-      try {
+        const res = await response.json();
+        console.log(res);
         localStorage.setItem("studyPlan", JSON.stringify(res));
-      } catch(error) {
-        studyPlanResult.textContent = "Error: " + error.message;
-      }
+
 
     } catch (error) {
-        studyPlanResult.textContent = "Error: " + error.message;
+        document.getElementById("study-plan-result").textContent = "Error: " + error.message;
     }
-  };
-
-  // Function to display the generated study guide
-  function displayStudyGuide(studyGuideData) {
-    // Clear previous study guide content
-    studyTasks.innerHTML = "";
-    studyWebsites.innerHTML = "";
-    studyTime.innerHTML = "";
-
-    // Add tasks to the study guide
-    studyGuideData.tasks.forEach(task => {
-      const li = document.createElement("li");
-      li.textContent = task;
-      studyTasks.appendChild(li);
-    });
-
-    // Add websites to block to the study guide
-    studyGuideData.websitesToBlock.forEach(site => {
-      const li = document.createElement("li");
-      li.textContent = site;
-      studyWebsites.appendChild(li);
-    });
-
-    // Add time to the study guide
-    studyTime.textContent = studyGuideData.timeToFinish;
-
-    // Show the study guide
-    studyGuide.style.display = "block";
-  }
-});
+}});
