@@ -1,16 +1,16 @@
-# StudySphere
+# StudySphere - DSRR
 
 ## Inspiration
 StudySphere was created to help students **stay focused and productive** while studying. We recognized that distractions—like social media, entertainment sites, and unstructured study sessions—reduce efficiency. By integrating **AI-powered analysis**, **Pomodoro timing**, and **distraction tracking**, StudySphere provides a structured study experience with **personalized recommendations** to improve habits.
 
 ##  What It Does
 StudySphere is a **Google Chrome extension** that helps students:
-- **Track Time on Distracting Websites** 🕒
-- **Use a Pomodoro Timer** for Structured Study Sessions 🍅
-- **Block Distracting Websites** 🚫
-- **Receive AI-Generated Study Tips** 📚
-- **Analyze Their Study Sessions** 📊
-- **Automatically Resume Sessions** When the Extension is Reopened 🔄
+- **Track Time on Distracting Websites**
+- **Use a Pomodoro Timer** for Structured Study Sessions
+- **Block Distracting Websites**
+- **Receive AI-Generated Study Tips**
+- **Analyze Their Study Sessions**
+- **Automatically Resume Sessions** When the Extension is Reopened
 
 ## How We Built It
 ### **Tech Stack**
