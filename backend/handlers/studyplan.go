@@ -14,8 +14,8 @@ import (
 
 // UserInput holds the data that the user provides.
 type UserInput struct {
-	StudyTimePerDay int      `json:"study_time_per_day"` // Total study time per day in hours
-	Tasks           []string `json:"tasks"`              // List of tasks to complete
+	Hours int      `json:"time"`  // Total study time per day in hours
+	Tasks []string `json:"tasks"` // List of tasks to complete
 }
 
 // StudyPlan holds the response that will be returned to the user.
@@ -40,13 +40,13 @@ func createStudyPlan(userInput UserInput) (string, error) {
 	}
 
 	// Time per task (in hours), based on study time per day and number of tasks
-	timePerTask := userInput.StudyTimePerDay / numTasks
+	timePerTask := userInput.Hours / numTasks
 
 	// Format the prompt with study time per task
 	prompt := fmt.Sprintf(
-		"Create a personalized study plan for the following tasks: %s. The user has %d hours per day to study. " +
+		"Create a personalized study plan for the following tasks: %s. The user has %d hours per day to study. "+
 			"Allocate %d hours per task accordingly to ensure all tasks are completed.",
-		tasks, userInput.StudyTimePerDay, timePerTask,
+		tasks, userInput.Hours, timePerTask,
 	)
 
 	// Debugging: Log the prompt being sent to the API
@@ -115,7 +115,7 @@ func createStudyPlan(userInput UserInput) (string, error) {
 // studyPlanHandler processes the request and sends the generated study plan to the frontend.
 func StudyPlanHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("📢 StudyPlanHandler hit!") // Add this to check if it's being called
-	
+
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
