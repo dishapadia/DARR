@@ -29,7 +29,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const tasks = Array.from(taskList.querySelectorAll(".task-input"))
       .map(input => input.value.trim())
       .filter(task => task);
-    const time = document.getElementById("end-time").value;
+    const time = document.getElementById('end-time').value;
+
     const blockSites = Array.from(blockList.querySelectorAll(".block-input"))
       .map(input => input.value.trim())
       .filter(site => site);
@@ -40,44 +41,50 @@ document.addEventListener("DOMContentLoaded", function() {
       return;
     }
 
+    // Optionally, store the user data for the study guide
+    localStorage.setItem("studyGuideData", JSON.stringify({ tasks, time, blockSites }));
+
+    // Navigate to the new page (study-guide.html) within the extension popup
+    window.location.href = chrome.runtime.getURL("study-guide.html");
     // Send data to the backend to generate the study guide
     generateStudyGuideFromBackend(tasks, blockSites, time);
   });
 
   // Function to send data to backend and get the study guide response
-  function generateStudyGuideFromBackend(tasks, blockSites, time) {
-    // Replace with the actual endpoint of your backend API
-    const apiEndpoint = "https://your-backend-url.com/generate-study-guide";
+  async function generateStudyGuideFromBackend(tasks, blockSites, time) {
 
     // Prepare the data to send to the backend
     const data = {
       tasks: tasks,
-      websitesToBlock: blockSites,
-      timeToFinish: time,
+      // websitesToBlock: blockSites,
+      time: parseInt(time),
     };
 
-    // Send a POST request to the backend with the user data
-    fetch(apiEndpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-    .then(response => response.json())  // Assuming the backend sends back a JSON response
-    .then(responseData => {
-      // Assuming the backend returns a "studyGuide" object with the necessary info
-      if (responseData.studyGuide) {
-        displayStudyGuide(responseData.studyGuide);
-      } else {
-        alert("Failed to generate study guide. Please try again.");
+    try {
+      // Send the POST request to the backend
+      const response = await fetch("http://localhost:8080/studyplan", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+          throw new Error("Failed to generate study plan");
       }
-    })
-    .catch(error => {
-      console.error("Error generating study guide:", error);
-      alert("There was an error generating the study guide.");
-    });
-  }
+
+      // Parse the response
+      const res = await response.json();
+
+      // Display the study plan
+      studyPlanResult.textContent = res.plan;
+      localStorage.setItem("studyPlan", JSON.stringify(res));
+
+    } catch (error) {
+        studyPlanResult.textContent = "Error: " + error.message;
+    }
+  };
 
   // Function to display the generated study guide
   function displayStudyGuide(studyGuideData) {
