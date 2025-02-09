@@ -66,22 +66,17 @@ func callGroqSuggestions(prompt string) (string, error) {
 		return "", fmt.Errorf("GROQ_API_KEY is not set")
 	}
 
-	// Build the request payload for Groq's API.
-	// The payload structure is assumed for demonstration.
 	requestBody, err := json.Marshal(map[string]interface{}{
-		"model":      "llama-3.3-70b-versatile", // Replace with the actual model identifier if needed.
+		"model": "llama-3.3-70b-versatile", // Model from Groq documentation
 		"messages": []map[string]string{
-			{"role": "system", "content": "You are a helpful study assistant."},
-			{"role": "user", "content": prompt}, // ✅ Corrected field
+			{"role": "user", "content": prompt},
 		},
-		"max_tokens": 150,
-		"temperature": 0.7, // ✅ Optional: Adjust creativity level
 	})
 	if err != nil {
 		return "", err
 	}
 
-	// Replace the URL below with the actual Groq API endpoint.
+	// ✅ Update endpoint URL to match Groq documentation
 	req, err := http.NewRequest("POST", "https://api.groq.com/openai/v1/chat/completions", bytes.NewBuffer(requestBody))
 	if err != nil {
 		return "", err
@@ -89,7 +84,6 @@ func callGroqSuggestions(prompt string) (string, error) {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+apiKey)
 
-	// Send the request.
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -97,20 +91,33 @@ func callGroqSuggestions(prompt string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	// Check for a successful response.
-	if resp.StatusCode != http.StatusOK {
-		body, _ := ioutil.ReadAll(resp.Body)
-		return "", fmt.Errorf("Groq API error: %s", string(body))
-	}
-
-	// Parse the response.
-	// Adjust the response structure based on Groq's API.
-	var result struct {
-		Output string `json:"output"`
-	}
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	// ✅ Read the raw response body from Groq
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
 		return "", err
 	}
+
+	// 🔍 Debugging: Print the raw response from Groq
+	fmt.Println("Raw Groq API Response:", string(body))
+
+	// ✅ Parse response based on expected format
+	var result struct {
+		Choices []struct {
+			Message struct {
+				Content string `json:"content"`
+			} `json:"message"`
+		} `json:"choices"`
+	}
+
+	if err := json.Unmarshal(body, &result); err != nil {
+		return "", fmt.Errorf("JSON parse error: %v\nRaw response: %s", err, string(body))
+	}
+
+	// ✅ Return AI-generated suggestion if available, otherwise provide a fallback response
+	if len(result.Choices) > 0 {
+		return result.Choices[0].Message.Content, nil
+	}
+
 	return "Try breaking study sessions into Pomodoro intervals and reducing distractions.", nil
-	
 }
+
